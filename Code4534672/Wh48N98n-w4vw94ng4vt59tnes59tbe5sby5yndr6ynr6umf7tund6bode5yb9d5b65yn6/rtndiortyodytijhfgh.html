@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Admin Mode - Login</title>
+  <style>
+    body { font-family: 'Trebuchet MS', Arial, sans-serif; background: #f8f8f8; padding: 2rem; color: #222; }
+    header { text-align: center; background: gray; color: white; padding: 1rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid black; }
+    .login-container, .table-container { max-width: 900px; margin: 0 auto; background: gainsboro; padding: 2rem; border-radius: 10px; border: 2px solid black; }
+    input { padding: 0.5rem; margin-bottom: 1rem; width: 100%; border: 2px solid black; border-radius: 10px; }
+    button { padding: 0.5rem 1rem; border: 1px solid black; border-radius: 10px; background: #cecbcb; cursor: pointer; }
+    button:hover { background: gray; color: white; border: 2px solid black; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 0.8rem; border: 1px solid black; text-align: left; }
+    th { background: gray; color: white; }
+    tr:nth-child(even) { background: #dcdcdc; }
+    .btn { display: inline-block; padding: 0.5rem 1rem; margin-top: 1rem; border: 1px solid black; border-radius: 10px; background: #cecbcb; cursor: pointer; text-decoration: none; color: black; }
+    .btn:hover { background: gray; color: white; border: 2px solid black; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin Mode - Login</h1>
+  </header>
+
+  <div class="login-container" id="loginContainer">
+    <input type="password" id="adminKeyInput" placeholder="Admin Key" required>
+    <button id="loginBtn">Login</button>
+  </div>
+
+  <div class="table-container" id="tableContainer" style="display:none;">
+    <h2>Contact Submissions</h2>
+    <table id="submissionsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Submitted At</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="logoutBtn" class="btn">Logout</button>
+  </div>
+
+  <script>
+    const loginContainer = document.getElementById("loginContainer");
+    const tableContainer = document.getElementById("tableContainer");
+    const submissionsTableBody = document.querySelector("#submissionsTable tbody");
+
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    let adminKey = null;
+
+    loginBtn.addEventListener("click", () => {
+      const keyInput = document.getElementById("adminKeyInput").value.trim();
+      if (!keyInput) return alert("Enter admin key!");
+      adminKey = keyInput;
+      loginContainer.style.display = "none";
+      tableContainer.style.display = "block";
+      loadSubmissions();
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      adminKey = null;
+      tableContainer.style.display = "none";
+      loginContainer.style.display = "block";
+      submissionsTableBody.innerHTML = "";
+    });
+
+    async function loadSubmissions() {
+      try {
+        const response = await fetch("https://backend-snowy-two-92.vercel.app/api/submissions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ adminKey })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          alert("Error: " + result.error);
+          logoutBtn.click();
+          return;
+        }
+
+        // Clear table
+        submissionsTableBody.innerHTML = "";
+
+        // result should be an object of submissions (push IDs)
+        for (const id in result) {
+          const sub = result[id];
+          const tr = document.createElement("tr");
+          const date = new Date(sub.timestamp);
+          tr.innerHTML = `
+            <td>${sub.name}</td>
+            <td>${sub.email}</td>
+            <td>${sub.message}</td>
+            <td>${date.toLocaleString()}</td>
+          `;
+          submissionsTableBody.appendChild(tr);
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load submissions.");
+      }
+    }
+  </script>
+</body>
+</html>
