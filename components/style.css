@@ -3,6 +3,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
 }
 body {
   font-family: 'Trebuchet MS', Arial, sans-serif;
