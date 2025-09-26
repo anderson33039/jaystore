@@ -53,14 +53,12 @@ async function loadAppsFromRelease() {
           <p>${displayName}</p>
         `;
 
+        // Click → Download
         appDiv.addEventListener("click", () => {
-          const link = document.createElement("a");
-          link.href = downloadURL;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          const downloadURL = `https://github.com/anderson33039/jaystore/releases/download/v1.0/${fileName}`;
+          window.location.href = downloadURL; // ✅ direct download, no CORS issue
         });
+
 
         container.appendChild(appDiv);
       });
