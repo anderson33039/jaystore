@@ -78,6 +78,6 @@ sidemenubtn.forEach(btn => {
     console.log(`${btn.textContent} clicked`);
     const bclick = btn.textContent;
     const filt = bclick.toLowerCase();
-    window.location.href = `jaystore/Code4534672/${filt}.html`;
+    window.location.href = `Code4534672/${filt}.html`;
     });
 });
