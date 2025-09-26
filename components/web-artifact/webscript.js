@@ -94,6 +94,6 @@ const sidemenubtn = document.querySelectorAll(".menu-btn");
 sidemenubtn.forEach(btn => {
   btn.addEventListener("click", () => {
     const bclick = btn.textContent.toLowerCase();
-    window.location.href = `jaystore/Code4534672/${bclick}.html`;
+    window.location.href = `Code4534672/${bclick}.html`;
   });
 });
