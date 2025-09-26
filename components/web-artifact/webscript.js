@@ -1,5 +1,5 @@
 const container = document.querySelector(".appcontainer");
-const baseURL = "https://raw.githubusercontent.com/anderson33039/jaystore/main/apps/";
+const baseURL = "https://github.com/anderson33039/jaystore/releases/download/v1.0/";
 const iconURL = "https://github.com/anderson33039/jaystore/raw/refs/heads/main/icons/";
 
 // GitHub API to fetch file list
