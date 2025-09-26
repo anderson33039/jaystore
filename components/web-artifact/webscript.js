@@ -34,16 +34,20 @@ fetch(apiURL)
         `;
 
         // Click → Download
-        appDiv.addEventListener("click", () => {
-          const downloadURL = `${baseURL}${fileName}`;
-          const link = document.createElement("a");
-          link.href = downloadURL;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        });
-
+        appDiv.addEventListener("click", async () => {
+        const response = await fetch(`${baseURL}${fileName}`);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+      
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      
+        URL.revokeObjectURL(url);
+      });
         container.appendChild(appDiv);
       });
   })
