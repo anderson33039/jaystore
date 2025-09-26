@@ -3,6 +3,7 @@ const container = document.querySelector(".appcontainer");
 // GitHub repo info
 const owner = "anderson33039";
 const repo = "jaystore";
+const iconURL = "https://github.com/anderson33039/jaystore/raw/refs/heads/main/icons/";
 
 // Function to fetch latest release info
 async function fetchLatestRelease() {
